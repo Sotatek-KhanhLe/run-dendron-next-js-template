@@ -1,20 +1,20 @@
-import fs from "fs-extra";
-import path from "path";
-import { ConfigUtils, DendronConfig, NoteProps } from "@dendronhq/common-all";
-import _ from "lodash";
-import { NoteData } from "./types";
-import { GetStaticPathsResult } from "next";
-import { ParsedUrlQuery } from "querystring";
+import fs from 'fs-extra';
+import path from 'path';
+import { ConfigUtils, DendronConfig, NoteProps } from '@dendronhq/common-all';
+import _ from 'lodash';
+import { NoteData } from './types';
+import { GetStaticPathsResult } from 'next';
+import { ParsedUrlQuery } from 'querystring';
 
-export * from "./fetchers";
+export * from './fetchers';
 
-const NOTE_META_DIR = "meta";
-const NOTE_BODY_DIR = "notes";
+const NOTE_META_DIR = 'meta';
+const NOTE_BODY_DIR = 'notes';
 
 export function getDataDir(): string {
   const dataDir = process.env.DATA_DIR;
   if (!dataDir) {
-    throw new Error("DATA_DIR not set");
+    throw new Error('DATA_DIR not set');
   }
   return dataDir;
 }
@@ -25,7 +25,7 @@ export function getDataDir(): string {
 export function getNoteBody(id: string): Promise<string> {
   const dataDir = getDataDir();
   const body = fs.readFile(path.join(dataDir, NOTE_BODY_DIR, `${id}.html`), {
-    encoding: "utf8",
+    encoding: 'utf8',
   });
   return body;
 }
@@ -36,18 +36,18 @@ export function getNotes(): NoteData {
   if (_.isUndefined(_NOTES_CACHE)) {
     const dataDir = getDataDir();
     _NOTES_CACHE = fs.readJSONSync(
-      path.join(dataDir, "notes.json")
+      path.join(dataDir, 'notes.json')
     ) as NoteData;
   }
   return _NOTES_CACHE;
 }
 
-const NOTE_REF_DIR = "refs";
+const NOTE_REF_DIR = 'refs';
 let _REFS_CACHE: string[] | undefined;
 export function getRefBody(id: string) {
   const dataDir = getDataDir();
   const body = fs.readFile(path.join(dataDir, NOTE_REF_DIR, `${id}.html`), {
-    encoding: "utf8",
+    encoding: 'utf8',
   });
   return body;
 }
@@ -56,7 +56,7 @@ export function getNoteRefs() {
     const dataDir = getDataDir();
     try {
       _REFS_CACHE = fs.readJSONSync(
-        path.join(dataDir, "refs.json")
+        path.join(dataDir, 'refs.json')
       ) as string[];
     } catch {
       _REFS_CACHE = [];
@@ -82,6 +82,7 @@ export function getNotePaths(): GetStaticPathsResult<DendronNotePageParams> {
     .map((id) => {
       return { params: { id } };
     });
+
   return {
     paths,
     fallback: false,
@@ -100,7 +101,7 @@ let _CONFIG_CACHE: DendronConfig | undefined;
 export function getConfig(): Promise<DendronConfig> {
   if (_.isUndefined(_CONFIG_CACHE)) {
     const dataDir = getDataDir();
-    return fs.readJSON(path.join(dataDir, "dendron.json"));
+    return fs.readJSON(path.join(dataDir, 'dendron.json'));
   }
   return new Promise(() => _CONFIG_CACHE);
 }
@@ -108,7 +109,7 @@ export function getConfig(): Promise<DendronConfig> {
 export function getPublicDir(): string {
   const publicDir = process.env.PUBLIC_DIR;
   if (!publicDir) {
-    throw new Error("PUBLIC_DIR not set");
+    throw new Error('PUBLIC_DIR not set');
   }
   return publicDir;
 }
@@ -121,6 +122,6 @@ export async function getCustomHead(): Promise<string | null> {
     return null;
   }
   const publicDir = getPublicDir();
-  const headPath = path.join(publicDir, "header.html");
-  return fs.readFileSync(headPath, { encoding: "utf-8" });
+  const headPath = path.join(publicDir, 'header.html');
+  return fs.readFileSync(headPath, { encoding: 'utf-8' });
 }

@@ -15,8 +15,6 @@ import {
   getNotes,
 } from "../../utils/build";
 
-export default DendronNotePage;
-
 export const getStaticPaths: GetStaticPaths<DendronNotePageParams> =
   getNotePaths;
 
@@ -60,3 +58,5 @@ export const getStaticProps: GetStaticProps<
     throw err;
   }
 };
+
+export default DendronNotePage;
